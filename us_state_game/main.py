@@ -2,7 +2,6 @@ import turtle
 import pandas
 
 
-# Screen setup
 screen = turtle.Screen()
 screen.title("US State Game")
 
@@ -20,12 +19,22 @@ writer.penup()
 is_game_on = True
 score=0
 guessed_state=[]
+chance=0
 while is_game_on:
 
 # User input
-    guess = screen.textinput(f" {score} /{len(states)} states", prompt="Enter a US State").title()
+    guess = screen.textinput(f" {score} /{len(states)} states | {chance}/5", prompt="Enter a US State")
+
+    if guess is None:
+        break
+    guess=guess.title()
+
+    if guess == "Exit":
+       break
 
 
+    if guess in guessed_state:
+        continue
 
     if guess in states:
         state_data = data[data.state == guess]
@@ -36,15 +45,16 @@ while is_game_on:
         writer.goto(x, y)
         writer.write(guess, align="center", font=("Arial", 8, "normal"))
     else:
-        if guess == "Exit" or guess not in states:
+        chance+=1
+        if chance >= 5:
             is_game_on = False
-            missing_states=[]
-            for state in states:
-                if state not in guessed_state:
-                    missing_states.append(state)
-            missing_data=pandas.DataFrame(missing_states)
-            missing_data.to_csv("states_to_learn.csv")
 
+
+
+
+missing_states = [state for state in states if state not in guessed_state]
+missing_data = pandas.DataFrame(missing_states)
+missing_data.to_csv("states_to_learn.csv", index=False)
 
 
 
