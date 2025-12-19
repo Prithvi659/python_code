@@ -72,9 +72,7 @@ def search_data():
         if search_website in data:
             search_email=data[search_website]["email"]
             search_password=data[search_website]["password"]
-            messagebox.showinfo(title="website found ",message=f"Email: {search_email} \n Password: "
-                                                               f""
-                                                               f"{search_password}")
+            messagebox.showinfo(title="website found ",message=f"Email: {search_email} \n Password: {search_password}")
         else:
             messagebox.showerror(title="Error",message=f"Website {search_website} not found")
 
@@ -122,6 +120,7 @@ add_button.grid(column=1,row=5)
 
 search_button=Button(text="Search",width=10,command=search_data)
 search_button.grid(column=2,row=2)
+
 
 
 window.mainloop()
